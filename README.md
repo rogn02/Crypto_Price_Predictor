@@ -1,3 +1,7 @@
 # Crypto_Price_Predictor
-Crypto price predictor via sentiment analysis from various datasets
+We are building a crypto price predictor for multiple crypto currencies.
 ## Data was collected from the following:
+#### https://crypto.com/price
+#### https://coinmarketcap.com/
+#### https://www.kaggle.com/datasets/muhammedabdulazeem/top-crypto-historical-prices
+#### https://www.kaggle.com/datasets/sudalairajkumar/cryptocurrencypricehistory
