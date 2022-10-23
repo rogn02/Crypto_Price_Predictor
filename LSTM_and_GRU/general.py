@@ -2,7 +2,7 @@ from Modules import *
 from LSTM_model import *
 from GRU_model import *
 
-df=pd.read_csv("C:/Users/Rohan/Documents/PES/sem_5/MI/MI_Project/ND/Ethereum.csv")
+df=pd.read_csv("Kaggle_Datasets/Ethereum.csv")
 price = df[['Price']]
 scaler = MinMaxScaler(feature_range=(-1, 1))
 price['Price'] = scaler.fit_transform(price['Price'].values.reshape(-1,1))
