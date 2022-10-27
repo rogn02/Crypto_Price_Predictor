@@ -42,3 +42,5 @@ def GRU_Model_train(x_train,y_train_gru,x_test,scaler,y_test_gru):
     print('Train Score: %.2f RMSE' % (trainScore))
     testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
     print('Test Score: %.2f RMSE' % (testScore))
+    with open("GRU_pickle","wb") as files:
+        pickle.dump(model,files)
