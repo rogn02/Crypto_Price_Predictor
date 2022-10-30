@@ -15,10 +15,12 @@ class LSTM(nn.Module):
         out = self.fc(out[:, -1, :]) 
         return out
 #initializing the model
-def LSTM_Model_train(x_train,y_train_lstm,x_test,scaler,y_test_lstm):
+def LSTM_Model_train(x_train,y_train_lstm,x_test,scaler,y_test_lstm,coin_name):
     model = LSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
     criterion = torch.nn.MSELoss(reduction='mean')
-    optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
+    learning_rate=0.03
+    optimiser = torch.optim.Adam(model.parameters(), lr=learning_rate) 
+    print("MSEloss-mean","Adam-lr:",learning_rate)
     hist = np.zeros(num_epochs)
     start_time = time.time()
     L=[]
@@ -29,8 +31,7 @@ def LSTM_Model_train(x_train,y_train_lstm,x_test,scaler,y_test_lstm):
         hist[t] = loss.item()
         optimiser.zero_grad()
         loss.backward()
-        optimiser.step()
-    print("LSTM values:")   
+        optimiser.step()   
     training_time = time.time()-start_time
     print("Training time: {}".format(training_time))
     #CHecking out the rmse for the train and  test data 
@@ -43,3 +44,5 @@ def LSTM_Model_train(x_train,y_train_lstm,x_test,scaler,y_test_lstm):
     print('Train Score: %.2f RMSE' % (trainScore))
     testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
     print('Test Score: %.2f RMSE' % (testScore))
+    with open("model(LSTMGRU)/Pickled_Models/"+coin_name+"_LSTM_"+str(int(testScore))+".pkl","wb") as files:
+        pickle.dump(model,files)
