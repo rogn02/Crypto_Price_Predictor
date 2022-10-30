@@ -14,10 +14,13 @@ class GRU(nn.Module):
         out, (hn) = self.gru(x, (h0.detach()))
         out = self.fc(out[:, -1, :]) 
         return out
-def GRU_Model_train(x_train,y_train_gru,x_test,scaler,y_test_gru):
+def GRU_Model_train(x_train,y_train_gru,x_test,scaler,y_test_gru,coin_name):
     model = GRU(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
     criterion = torch.nn.MSELoss(reduction='mean')
-    optimiser = torch.optim.Adam(model.parameters(), lr=0.01) #optimizer used is adam
+    learning_rate=0.03
+    optimiser = torch.optim.Adam(model.parameters(), lr=learning_rate) 
+    print("MSEloss-mean","Adam-lr:",learning_rate)
+    #optimiser = torch.optim.Adam(model.parameters(), lr=0.03) best
     hist = np.zeros(num_epochs)
     start_time = time.time()
     L=[]
@@ -29,8 +32,7 @@ def GRU_Model_train(x_train,y_train_gru,x_test,scaler,y_test_gru):
         optimiser.zero_grad()
         loss.backward()
         optimiser.step()
-    print("\n")
-    print("GRU values:")   
+    print("\n")  
     training_time = time.time()-start_time
     print("Training time: {}".format(training_time))
     y_test_pred=model(x_test)
@@ -42,3 +44,5 @@ def GRU_Model_train(x_train,y_train_gru,x_test,scaler,y_test_gru):
     print('Train Score: %.2f RMSE' % (trainScore))
     testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
     print('Test Score: %.2f RMSE' % (testScore))
+    with open("model(LSTMGRU)/Pickled_Models/"+coin_name+"_GRU_"+str(int(testScore))+".pkl","wb") as files:
+        pickle.dump(model,files)
