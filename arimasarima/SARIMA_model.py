@@ -1,5 +1,6 @@
 from modules import *
 
+
 def SARIMA_model_fit(train_data, test_data):
     training_data = train_data['Close'].values
     test_data = test_data['Close'].values
@@ -15,8 +16,14 @@ def SARIMA_model_fit(train_data, test_data):
         model_predictions.append(yhat)
         true_test_value = test_data[time_point]
         history.append(true_test_value)
-    
+
     MSE_error = mean_squared_error(test_data, model_predictions)
     print('Testing Mean Squared Error is {}'.format(MSE_error))
+
+    try:
+        with open("Models/Sarima_"+str(int(math.sqrt(MSE_error)))+".pkl", 'wb') as f:
+            pickle.dump(model, f)
+    except Exception as e:
+        print(e)
 
     return model_predictions
